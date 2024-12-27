@@ -26,7 +26,7 @@ const CategoriesSearchButtons: React.FC<CategoriesSearchButtonsProps> = ({
           className={`border border-textColorLight text-sm py-1 px-2 md:py-2 md:px-4 rounded-full transition duration-150 ${
             activeCategory === category.value
               ? "bg-textColor text-white"
-              : "text-textColorLight hover:bg-textColor hover:text-white hover:border-textColor"
+              : "text-textColorLighter border-textColorLighter hover:bg-textColor hover:text-white hover:border-textColor"
           }`}
           onClick={() => onCategoryChange(category.value)}
         >

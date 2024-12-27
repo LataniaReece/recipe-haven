@@ -9,11 +9,15 @@ import Loading from "../Loading";
 interface InfiniteScrollRecipeListProps {
   apiUrl: string;
   activeCategory: string;
+  isSearchMode: boolean;
+  setIsNoSearchResultsFound: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
   apiUrl,
   activeCategory,
+  isSearchMode,
+  setIsNoSearchResultsFound,
 }) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
@@ -25,6 +29,7 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
 
   const fetchRecipes = useCallback(
     async (url: string) => {
+      setIsNoSearchResultsFound(false);
       if (!url) return;
 
       try {
@@ -33,6 +38,10 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
         if (!res.ok) throw new Error("Failed to fetch recipes");
 
         const data = await res.json();
+
+        if (isSearchMode && data.count === 0) {
+          setIsNoSearchResultsFound(true);
+        }
 
         setRecipes((prevRecipes) =>
           url === apiUrl ? data.hits : [...prevRecipes, ...data.hits]
@@ -45,7 +54,7 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
         setLoading(false);
       }
     },
-    [apiUrl]
+    [apiUrl, isSearchMode, setIsNoSearchResultsFound]
   );
 
   // Effect 1: Reset recipes and fetch initial data on category change
@@ -60,8 +69,9 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
   useEffect(() => {
     if (recipes.length > 0) {
       setInitialFetchDone(true);
+      setIsNoSearchResultsFound(false);
     }
-  }, [recipes]);
+  }, [recipes, setIsNoSearchResultsFound, isSearchMode]);
 
   // Effect 3: Infinite scrolling
   useEffect(() => {

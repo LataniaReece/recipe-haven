@@ -7,7 +7,12 @@ interface RecipeListItemProps {
 
 const RecipeListItem = ({ recipe }: RecipeListItemProps) => {
   return (
-    <div className="border rounded-3xl shadow-sm hover:shadow-slate-500 hover:cursor-pointer transition duration-100 bg-white flex flex-col h-full">
+    <a
+      href={recipe.recipe.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="border rounded-3xl shadow-sm hover:shadow-secondaryColorDark hover:cursor-pointer transition duration-100 bg-white flex flex-col h-full"
+    >
       {/* Recipe Image */}
       <div className="flex justify-center -mt-10">
         <div className="relative w-40 h-40 rounded-full overflow-hidden">
@@ -35,17 +40,12 @@ const RecipeListItem = ({ recipe }: RecipeListItemProps) => {
           <div className="text-gray-700 text-sm italic">
             {recipe.recipe.source}
           </div>
-          <a
-            href={recipe.recipe.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-primaryColor hover:bg-primaryColorLight text-white font-semibold text-sm p-2 rounded-lg transition inline-block text-center"
-          >
+          <span className="bg-primaryColor hover:bg-primaryColorLight text-white font-semibold text-sm p-2 rounded-lg transition inline-block text-center">
             View Recipe
-          </a>
+          </span>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
