@@ -15,7 +15,7 @@ const RecipeListItem = ({ recipe }: RecipeListItemProps) => {
     >
       {/* Recipe Image */}
       <div className="flex justify-center -mt-10">
-        <div className="relative w-40 h-40 rounded-full overflow-hidden">
+        <div className="relative w-28 h-28 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden">
           <Image
             src={recipe.recipe.image}
             alt={recipe.recipe.label}
@@ -40,7 +40,7 @@ const RecipeListItem = ({ recipe }: RecipeListItemProps) => {
           <div className="text-gray-700 text-sm italic">
             {recipe.recipe.source}
           </div>
-          <span className="bg-primaryColor hover:bg-primaryColorLight text-white font-semibold text-sm p-2 rounded-lg transition inline-block text-center">
+          <span className="bg-primaryColorLighter hover:bg-primaryColorLight text-white font-semibold text-sm p-2 rounded-lg transition inline-block text-center">
             View Recipe
           </span>
         </div>

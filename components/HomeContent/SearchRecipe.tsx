@@ -36,10 +36,10 @@ const SearchRecipe: React.FC<SearchRecipeProps> = ({
   return (
     <form
       onSubmit={handleSearch}
-      className="flex items-center px-6 mb-10 max-w-xl "
+      className="flex items-center px-4 md:px-6 mb-5 md:mb-10 max-w-xl "
     >
       <label htmlFor="search-recipe" className="sr-only">
-        Search for a recipe
+        Search recipe
       </label>
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -50,13 +50,13 @@ const SearchRecipe: React.FC<SearchRecipeProps> = ({
           id="search-recipe"
           value={query}
           onChange={handleChange}
-          placeholder="Search for a recipe..."
-          className="w-full pl-8 p-2.5 text-sm border rounded-lg focus:ring-primaryColor focus:border-primaryColor bg-gray-50 border-gray-300"
+          placeholder="Search recipe..."
+          className="w-full pl-8 px-2.5 py-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-secondaryColorDark focus:border-secondaryColorDark bg-gray-50 border-gray-300"
         />
       </div>
       <button
         type="submit"
-        className="ml-2 p-2.5 bg-primaryColor hover:bg-primaryColorLight text-white text-sm font-medium rounded-lg focus:ring-4 focus:outline-none focus:ring-primaryColorLight"
+        className="ml-2 px-2.5 py-2 border border-primaryColor text-primaryColor hover:bg-primaryColorLight hover:text-white text-sm font-medium rounded-lg focus:ring-4 focus:outline-none focus:ring-primaryColorLight"
       >
         Search
       </button>

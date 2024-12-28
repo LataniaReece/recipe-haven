@@ -19,7 +19,7 @@ const CategoriesSearchButtons: React.FC<CategoriesSearchButtonsProps> = ({
   onCategoryChange,
 }) => {
   return (
-    <div className="space-x-2 md:space-x-4 mt-10 px-6">
+    <div className="flex gap-3 flex-wrap mt-5 md:mt-10 px-4 md:px-6">
       {categories.map((category) => (
         <button
           key={category.value}

@@ -51,7 +51,7 @@ const HomeContent = () => {
 
       {/* Title */}
       <h1
-        className={`text-textColor text-4xl font-bold ${playfairDisplay.className} px-6`}
+        className={`text-textColor text-3xl md:text-4xl font-bold ${playfairDisplay.className} px-4 md:px-6`}
       >
         Simple Recipes, Extraordinary Meals
       </h1>

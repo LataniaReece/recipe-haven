@@ -104,7 +104,7 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center mt-20 text-center">
+      <div className="flex flex-col items-center justify-center mt-10 md:mt-20 text-center">
         <MdError className="text-red-700 text-5xl mb-4" />
         <h2 className="text-xl font-semibold text-red-700 mb-2">
           Uh oh, something went wrong!
@@ -115,7 +115,7 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
   }
 
   return (
-    <div className="mt-20 py-10">
+    <div className="py-10 mt-10 md:mt-20">
       <RecipeList recipes={recipes} />
       {loading && (
         <div className="mt-4">

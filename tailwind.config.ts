@@ -10,11 +10,12 @@ export default {
     extend: {
       colors: {
         primaryColor: "#32746d",
+        primaryColorLighter: "#80C6C0",
         primaryColorLight: "#3D8F87",
         primaryColorDark: "#2B645E",
-        secondaryColor: "#FFABAB",
-        secondaryColorDark: "#FF7070",
-        secondaryColorDarker: "#FF7070",
+        secondaryColor: "#FFDEAD",
+        secondaryColorDark: "#FFCBA4",
+        secondaryColorDarker: "#E3B28D",
         backgroundColor: "#f4f2ee",
         textColor: "#1F1F1F",
         textColorLight: "#474747",
