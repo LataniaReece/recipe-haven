@@ -119,7 +119,7 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
       <RecipeList recipes={recipes} />
       {loading && (
         <div className="mt-4">
-          <Loading />
+          <Loading text="Fetching Recipes..." />
         </div>
       )}
       <div ref={infiniteScrollTriggerRef} />

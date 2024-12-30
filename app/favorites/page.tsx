@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import RecipeList from "@/components/Recipes/RecipeList";
 
 const FavoritesPage = () => {
-  //   const { data: session } = useSession();
-  const session = false;
-  const [favorites, setFavorites] = useState([]); // Replace with API call to fetch user's favorites
+  const { data: session, status } = useSession();
+  const [favorites, setFavorites] = useState([]);
 
-  if (!session) {
+  if (status === "unauthenticated" || !session) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-backgroundColor text-center p-6">
         <h2 className="text-2xl font-bold text-primaryColor mb-4">

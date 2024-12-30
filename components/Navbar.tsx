@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import {
   FaUtensils,
   FaHeart,
@@ -11,6 +12,8 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { Lobster } from "next/font/google";
+import NavLink from "./NavLink";
+import { showErrorToast, showSuccessToast } from "@/utils/toastHelpers";
 
 const lobsterFont = Lobster({
   subsets: ["latin"],
@@ -18,17 +21,26 @@ const lobsterFont = Lobster({
   variable: "--font-lobster",
 });
 
-const Navbar = () => {
+const Navbar: React.FC<{
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setIsMenuOpen }) => {
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path;
 
-  const navItems = [
-    { href: "/", icon: <FaUtensils size={20} />, label: "Recipes" },
-    { href: "/favorites", icon: <FaHeart size={20} />, label: "Favorites" },
-    { href: "/signin", icon: <FaSignInAlt size={20} />, label: "Sign In" },
-    { href: "/register", icon: <FaUserPlus size={20} />, label: "Register" },
-  ];
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut({ redirect: false });
+      showSuccessToast("You have signed out successfully!");
+    } catch (error) {
+      showErrorToast("Failed to sign out. Please try again.");
+    }
+  };
 
   return (
     <nav className="bg-white min-h-full flex flex-col items-center shadow-lg pt-8">
@@ -36,33 +48,56 @@ const Navbar = () => {
       <Link
         href="/"
         className={`text-4xl font-bold mb-10 text-primaryColor tracking-wide ${lobsterFont.className}`}
+        onClick={handleLinkClick}
       >
         Recipe Haven
       </Link>
 
-      {/* Buttons */}
+      {/* Navigation Items */}
+
       <div className="flex flex-col w-full flex-grow gap-4 px-6 pb-4">
-        {navItems.map(({ href, icon, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`flex items-center w-full gap-4 py-3 px-4 rounded-lg font-medium ${
-              isActive(href)
-                ? "bg-secondaryColorDark text-white"
-                : "bg-white text-gray-800 border hover:bg-gray-100"
-            }`}
-          >
-            {icon}
-            {label}
-          </Link>
-        ))}
-        <button
-          onClick={() => console.log("Sign Out logic goes here")}
-          className="flex items-center w-full gap-4 bg-white text-gray-800 border py-3 px-4 rounded-lg font-medium hover:bg-gray-100"
-        >
-          <FaSignOutAlt size={20} />
-          Sign Out
-        </button>
+        <NavLink
+          href="/"
+          label="Recipes"
+          icon={<FaUtensils size={20} />}
+          isActive={isActive("/")}
+          onClick={handleLinkClick}
+        />
+        <NavLink
+          href="/favorites"
+          label="Favorites"
+          icon={<FaHeart size={20} />}
+          isActive={isActive("/favorites")}
+          onClick={handleLinkClick}
+        />
+        {session ? (
+          <>
+            <button
+              onClick={handleSignOut}
+              className="flex items-center w-full gap-4 bg-white text-gray-800 border py-3 px-4 rounded-lg font-medium hover:bg-gray-100"
+            >
+              <FaSignOutAlt size={20} />
+              Sign Out
+            </button>
+          </>
+        ) : (
+          <>
+            <NavLink
+              href="/signin"
+              label="Sign In"
+              icon={<FaSignInAlt size={20} />}
+              isActive={isActive("/signin")}
+              onClick={handleLinkClick}
+            />
+            <NavLink
+              href="/register"
+              label="Register"
+              icon={<FaUserPlus size={20} />}
+              isActive={isActive("/register")}
+              onClick={handleLinkClick}
+            />
+          </>
+        )}
       </div>
 
       {/* Illustration */}
@@ -70,9 +105,10 @@ const Navbar = () => {
         <Image
           src="/images/cooking.svg"
           alt="Cooking Illustration"
-          width={200}
-          height={200}
-          className="mx-auto"
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-full h-auto"
         />
       </div>
     </nav>

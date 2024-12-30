@@ -9,3 +9,21 @@ body {
   height: 100vh;
   box-sizing: border-box;
 }
+
+/* Success Toast */
+.custom-success-toast {
+  background-color: #3d8f87;
+  color: #ffffff;
+  border: 1px solid #3d8f87;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Error Toast */
+.custom-error-toast {
+  background-color: #e53e3e;
+  color: #ffffff;
+  border: 1px solid #e53e3e;
+  font-size: 1rem;
+  font-weight: 600;
+}

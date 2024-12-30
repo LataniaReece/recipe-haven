@@ -93,7 +93,7 @@ const HomeContent = () => {
       )}
 
       {/* Infinite Scroll Recipe List */}
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading text="Fetching Recipes..." />}>
         <InfiniteScrollRecipeList
           apiUrl={searchApiUrl || generateApiUrl(activeCategory)}
           activeCategory={activeCategory}

@@ -16,10 +16,14 @@ export default {
         secondaryColor: "#FFDEAD",
         secondaryColorDark: "#FFCBA4",
         secondaryColorDarker: "#E3B28D",
+
         backgroundColor: "#f4f2ee",
+
         textColor: "#1F1F1F",
         textColorLight: "#474747",
         textColorLighter: "#8F8F8F",
+
+        googleColor: "#357ae8",
       },
     },
   },
