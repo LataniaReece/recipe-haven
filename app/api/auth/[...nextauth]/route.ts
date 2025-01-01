@@ -6,13 +6,10 @@ import supabase from "@/lib/supabase";
 
 const handler = NextAuth({
   providers: [
-    // Google Authentication
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-
-    // Credentials Authentication (email/password)
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -22,12 +19,10 @@ const handler = NextAuth({
       async authorize(credentials) {
         const { email, password } = credentials || {};
 
-        // Validate input
         if (!email || !password) {
           throw new Error("Email and password are required");
         }
 
-        // Fetch user from database
         const { data: user, error } = await supabase
           .from("users")
           .select("*")
@@ -38,32 +33,86 @@ const handler = NextAuth({
           throw new Error("Invalid email or password");
         }
 
-        // Compare password
         const isValid = await bcrypt.compare(password, user.hashed_password);
         if (!isValid) {
           throw new Error("Invalid email or password");
         }
 
-        // Return user data
-        return { id: user.id, email: user.email };
+        return {
+          id: user.id,
+          email: user.email,
+          favorites: user.favorites,
+          isNewUser: user.is_new_user || false,
+        };
       },
     }),
   ],
   session: {
-    strategy: "jwt", // Use JSON Web Tokens for session management
+    strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session, account }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.favorites = user.favorites || [];
+        token.isNewUser = user.isNewUser || false;
       }
+
+      if (account && account.provider === "google") {
+        const { data: existingUser, error: existingUserError } = await supabase
+          .from("users")
+          .select("id, email, favorites, is_new_user")
+          .eq("email", token.email)
+          .single();
+
+        if (existingUserError && existingUserError.code !== "PGRST116") {
+          console.error(existingUserError);
+          throw new Error("Error retrieving user from database.");
+        }
+
+        if (!existingUser) {
+          // Add new user if not found
+          const { data: newUser, error: insertError } = await supabase
+            .from("users")
+            .insert([
+              {
+                email: token.email,
+                favorites: [],
+                is_new_user: true,
+              },
+            ])
+            .select("id, email, favorites, is_new_user")
+            .single();
+
+          if (insertError || !newUser) {
+            throw new Error("Failed to create user in database.");
+          }
+
+          token.id = newUser.id;
+          token.email = newUser.email;
+          token.favorites = newUser.favorites;
+          token.isNewUser = newUser.is_new_user;
+        } else {
+          token.id = existingUser.id;
+          token.email = existingUser.email;
+          token.favorites = existingUser.favorites || [];
+          token.isNewUser = existingUser.is_new_user || false;
+        }
+      }
+
+      if (trigger === "update" && session) {
+        return { ...token, ...session?.user };
+      }
+
       return token;
     },
     async session({ session, token }) {
       session.user = {
         id: token.id as string,
         email: token.email as string,
+        favorites: (token.favorites as string[]) || [],
+        isNewUser: (token.isNewUser as boolean) || false,
       };
       return session;
     },

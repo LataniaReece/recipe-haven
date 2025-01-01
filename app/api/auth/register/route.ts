@@ -23,9 +23,7 @@ export async function POST(req: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        {
-          error: "Email is already registered.",
-        },
+        { error: "Email is already registered." },
         { status: 400 }
       );
     }
@@ -33,18 +31,35 @@ export async function POST(req: Request) {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert the new user
+    // Insert the new user with is_new_user = true
     const { data: newUser, error } = await supabase
       .from("users")
-      .insert([{ email, hashed_password: hashedPassword }])
-      .select("*")
+      .insert([
+        {
+          email,
+          hashed_password: hashedPassword,
+          favorites: [],
+          is_new_user: true,
+        },
+      ])
+      .select("id, email, favorites, is_new_user")
       .single();
 
     if (error) {
       throw new Error(error.message);
     }
 
-    return NextResponse.json({ user: newUser }, { status: 201 });
+    return NextResponse.json(
+      {
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          favorites: newUser.favorites || [],
+          isNewUser: newUser.is_new_user,
+        },
+      },
+      { status: 201 }
+    );
   } catch (error: any) {
     console.error("Error registering user:", error.message);
     return NextResponse.json(

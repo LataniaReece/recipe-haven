@@ -12,6 +12,8 @@ import Loading from "@/components/Loading";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import { showErrorToast } from "@/utils/toastHelpers";
+import CustomToastContainer from "@/components/CustomToastContainer";
+import WelcomePopup from "@/components/HomeContent/WelcomePopup";
 
 const lobsterFont = Lobster({
   subsets: ["latin"],
@@ -59,15 +61,7 @@ export default function RootLayout({
       >
         <SessionProvider>
           {/* Toast Notifications */}
-          <ToastContainer
-            position="top-left"
-            autoClose={3000}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            toastClassName="custom-toast"
-          />
+          <CustomToastContainer />
 
           <SessionWrapper>
             <div className="flex flex-col lg:flex-row h-full">
@@ -109,6 +103,7 @@ export default function RootLayout({
                     Recipe Haven
                   </Link>
                 </div>
+                <WelcomePopup />
                 <div className="flex-1">{children}</div>
               </div>
             </div>

@@ -36,7 +36,7 @@ const Navbar: React.FC<{
   const handleSignOut = async () => {
     try {
       await signOut({ redirect: false });
-      showSuccessToast("You have signed out successfully!");
+      showSuccessToast("See you soon!");
     } catch (error) {
       showErrorToast("Failed to sign out. Please try again.");
     }
