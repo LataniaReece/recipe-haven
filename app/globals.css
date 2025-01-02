@@ -27,3 +27,12 @@ body {
   font-size: 1rem;
   font-weight: 600;
 }
+
+/* Warning Toast */
+.custom-warn-toast {
+  background-color: #ffeeba;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  font-size: 1rem;
+  font-weight: 600;
+}

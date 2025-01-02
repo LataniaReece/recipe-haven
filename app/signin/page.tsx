@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { signIn, useSession } from "next-auth/react";
 import { popupCenter } from "@/utils/popupCenter";
 import Loading from "@/components/Loading";
-import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
@@ -14,9 +14,8 @@ const SignInPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { data: session, status } = useSession();
-
-  useRedirectIfAuthenticated();
+  const { status } = useSession();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,9 +31,14 @@ const SignInPage = () => {
 
       if (!res?.ok) {
         setError("Invalid email or password. Please try again.");
+        setLoading(false);
+        return;
       }
-    } catch (err: any) {
-      setError(err.message || "Something went wrong.");
+
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

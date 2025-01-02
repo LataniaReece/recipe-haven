@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       .from("users")
       .update({ is_new_user: false })
       .eq("id", userId)
-      .select("id, email, favorites, is_new_user")
+      .select("id, email, is_new_user")
       .single();
 
     if (error) {
@@ -25,7 +25,6 @@ export async function POST(req: Request) {
       user: {
         id: updatedUser.id,
         email: updatedUser.email,
-        favorites: updatedUser.favorites,
         isNewUser: updatedUser.is_new_user,
       },
     });

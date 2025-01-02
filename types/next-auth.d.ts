@@ -4,7 +4,6 @@ declare module "next-auth" {
   interface User {
     id: string;
     email: string;
-    favorites: string[];
     isNewUser: boolean;
   }
 
@@ -12,7 +11,6 @@ declare module "next-auth" {
     user: {
       id: string;
       email: string;
-      favorites: string[];
       isNewUser: boolean;
     };
   }
@@ -20,6 +18,5 @@ declare module "next-auth" {
   interface JWT {
     id: string;
     email: string;
-    favorites: string[];
   }
 }

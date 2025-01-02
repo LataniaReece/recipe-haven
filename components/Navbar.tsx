@@ -14,6 +14,7 @@ import {
 import { Lobster } from "next/font/google";
 import NavLink from "./NavLink";
 import { showErrorToast, showSuccessToast } from "@/utils/toastHelpers";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 const lobsterFont = Lobster({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ const lobsterFont = Lobster({
 const Navbar: React.FC<{
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setIsMenuOpen }) => {
+  const { clearFavorites } = useFavorites();
   const { data: session } = useSession();
   const pathname = usePathname();
 
@@ -36,6 +38,7 @@ const Navbar: React.FC<{
   const handleSignOut = async () => {
     try {
       await signOut({ redirect: false });
+      clearFavorites();
       showSuccessToast("See you soon!");
     } catch (error) {
       showErrorToast("Failed to sign out. Please try again.");

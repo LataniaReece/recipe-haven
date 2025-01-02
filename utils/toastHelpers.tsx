@@ -1,5 +1,9 @@
 import { toast, ToastOptions } from "react-toastify";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaExclamationCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 
 // Success Toast
 const showSuccessToast = (message: string, options?: ToastOptions) => {
@@ -29,4 +33,18 @@ const showErrorToast = (message: string, options?: ToastOptions) => {
   }
 };
 
-export { showSuccessToast, showErrorToast };
+// Warning Toast
+const showWarnToast = (message: string, options?: ToastOptions) => {
+  const toastId = `warn-${message}`;
+  if (!toast.isActive(toastId)) {
+    toast.warn(message, {
+      ...options,
+      icon: <FaExclamationCircle className="text-white" size={24} />,
+      className: "custom-warn-toast",
+      progressClassName: "custom-warn-progress-bar",
+      toastId,
+    });
+  }
+};
+
+export { showSuccessToast, showErrorToast, showWarnToast };

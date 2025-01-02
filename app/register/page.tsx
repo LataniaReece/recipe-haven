@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signIn, useSession } from "next-auth/react";
 import { popupCenter } from "@/utils/popupCenter";
 import Loading from "@/components/Loading";
-import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -14,9 +14,8 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { data: session, status } = useSession();
-
-  useRedirectIfAuthenticated();
+  const { status } = useSession();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +49,7 @@ const RegisterPage = () => {
           "Failed to log in after registration. Please try signing in."
         );
       }
+      router.push("/");
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
     } finally {
