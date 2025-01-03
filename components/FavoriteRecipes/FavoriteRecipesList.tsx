@@ -1,6 +1,6 @@
+import React from "react";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { RecipeFromDB } from "@/types/recipeTypes";
-import React from "react";
 
 const FavoriteRecipesList: React.FC<{ favoriteRecipes: RecipeFromDB[] }> = ({
   favoriteRecipes,
@@ -10,27 +10,29 @@ const FavoriteRecipesList: React.FC<{ favoriteRecipes: RecipeFromDB[] }> = ({
   return (
     <div>
       {favoriteRecipes.map((recipe) => (
-        <div key={recipe.id} className="p-4 border-b">
-          <h3 className="text-xl font-bold">{recipe.label}</h3>
-          <p className="text-gray-500">
+        <div key={recipe.id} className="py-4 border-b">
+          <div className="flex items-center gap-2">
+            <h3 className="text-xl text-textColorLight font-bold">
+              {recipe.label}
+            </h3>{" "}
+            <button
+              onClick={() => toggleFavorite(recipe)}
+              className="text-xs cursor-pointer text-red-700 underline hover:no-underline"
+            >
+              Remove
+            </button>
+          </div>
+          <p className="text-gray-500 text-sm mb-2">
             {recipe.mealType && recipe.mealType[0]}
           </p>
           <a
             href={recipe.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-secondaryColor underline"
+            className="text-secondaryColorDarker underline hover:no-underline"
           >
             See Recipe
           </a>
-          <div className="mt-2">
-            <button
-              onClick={() => toggleFavorite(recipe)}
-              className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-            >
-              Remove from Favorites
-            </button>
-          </div>
         </div>
       ))}
     </div>

@@ -120,7 +120,7 @@ const RegisterPage = () => {
             <button
               type="button"
               className="flex justify-center items-center border border-googleColor text-textColor py-2 px-4 rounded-lg hover:bg-googleColor transition"
-              onClick={() => popupCenter("/google-signin", "Sample Sign In")}
+              onClick={() => popupCenter("/google-signin", "Google Sign In")}
               disabled={loading}
             >
               <FcGoogle className="mr-2" size={20} />

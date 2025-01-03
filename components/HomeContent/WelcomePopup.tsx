@@ -48,7 +48,7 @@ const WelcomePopup = () => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg text-center relative">
+      <div className="max-w-xs md:max-w-sm bg-white p-6 rounded-lg shadow-lg text-center relative">
         <div className="flex justify-center">
           <Image
             src="/images/welcome.svg"
@@ -59,12 +59,9 @@ const WelcomePopup = () => {
           />
         </div>
         <h2 className="my-2 text-2xl font-bold">Welcome to Recipe Haven!</h2>
-        <p className="text-secondary text-sm font-light">
+        <p className="text-secondary text-sm font-light mb-4">
           Explore a world of delicious recipes, save your favorites, and access
           them anytime, anywhere.
-        </p>
-        <p className="text-secondary text-sm font-light mb-4">
-          We’re excited to be part of your cooking journey!
         </p>
         <button
           onClick={handleClose}

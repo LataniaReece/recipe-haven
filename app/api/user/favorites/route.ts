@@ -17,7 +17,8 @@ export async function GET(req: Request) {
     const { data: favorites, error } = await supabase
       .from("favorites")
       .select("recipe")
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
 
@@ -54,7 +55,8 @@ export async function POST(req: Request) {
     const { data: favorites, error: fetchError } = await supabase
       .from("favorites")
       .select("recipe")
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
     if (fetchError) throw fetchError;
 
@@ -72,8 +74,6 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const { userId, recipe } = await req.json();
 
-  console.log(userId);
-  console.log(recipe);
   if (!userId || !recipe) {
     return NextResponse.json(
       { error: "User ID and recipe data are required." },
@@ -94,7 +94,8 @@ export async function DELETE(req: Request) {
     const { data: favorites, error: fetchError } = await supabase
       .from("favorites")
       .select("recipe")
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
 
     if (fetchError) throw fetchError;
 

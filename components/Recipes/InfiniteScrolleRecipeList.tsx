@@ -1,106 +1,57 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect } from "react";
+import useSWRInfinite from "swr/infinite";
 import { MdError } from "react-icons/md";
-import { Recipe } from "@/types/recipeTypes";
 import RecipeList from "./RecipeList";
 import Loading from "../Loading";
 
 interface InfiniteScrollRecipeListProps {
   apiUrl: string;
-  activeCategory: string;
   isSearchMode: boolean;
   setIsNoSearchResultsFound: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
   apiUrl,
-  activeCategory,
   isSearchMode,
   setIsNoSearchResultsFound,
 }) => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [initialFetchDone, setInitialFetchDone] = useState(false);
-
-  const infiniteScrollTriggerRef = useRef<HTMLDivElement | null>(null);
-
-  const fetchRecipes = useCallback(
-    async (url: string) => {
-      setIsNoSearchResultsFound(false);
-      if (!url) return;
-
-      try {
-        setLoading(true);
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error("Failed to fetch recipes");
-
-        const data = await res.json();
-
-        if (isSearchMode && data.count === 0) {
-          setIsNoSearchResultsFound(true);
-        }
-
-        setRecipes((prevRecipes) =>
-          url === apiUrl ? data.hits : [...prevRecipes, ...data.hits]
-        );
-        setNextPageUrl(data._links?.next?.href || null);
-
-        setLoading(false);
-      } catch (err) {
-        setError((err as Error)?.message || "An unknown error occurred");
-        setLoading(false);
-      }
+  const { data, error, size, setSize, isValidating } = useSWRInfinite(
+    (pageIndex, previousPageData) => {
+      if (pageIndex === 0) return apiUrl; // First page
+      return previousPageData?._links?.next?.href; // Subsequent pages
     },
-    [apiUrl, isSearchMode, setIsNoSearchResultsFound]
+    fetcher,
+    {
+      refreshInterval: 86400000, // Revalidate every 24 hours (24 * 60 * 60 * 1000 ms)
+      revalidateFirstPage: false,
+    }
   );
 
-  // Effect 1: Reset recipes and fetch initial data on category change
-  useEffect(() => {
-    setRecipes([]);
-    setNextPageUrl(apiUrl);
-    setInitialFetchDone(false);
-    fetchRecipes(apiUrl);
-  }, [apiUrl, activeCategory, fetchRecipes]);
+  const recipes = data ? data.flatMap((page) => page.hits) : [];
+  const nextPageUrl = data?.[data.length - 1]?._links?.next?.href || null;
 
-  // Effect 2: Update `initialFetchDone` after recipes are updated
+  // Determine loading states
+  const isLoadingInitialData = !data && !error;
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && typeof data?.[size - 1] === "undefined");
+  const isReachingEnd = !nextPageUrl;
+
+  // Handle no search results
   useEffect(() => {
-    if (recipes.length > 0) {
-      setInitialFetchDone(true);
-      setIsNoSearchResultsFound(false);
+    if (isSearchMode && !isLoadingInitialData && recipes.length === 0) {
+      setIsNoSearchResultsFound(true);
     }
-  }, [recipes, setIsNoSearchResultsFound, isSearchMode]);
-
-  // Effect 3: Infinite scrolling
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      // callback
-      ([entry]) => {
-        if (entry.isIntersecting && nextPageUrl && initialFetchDone) {
-          fetchRecipes(nextPageUrl);
-        }
-      },
-      // options
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: 1.0,
-      }
-    );
-
-    const currentElement = infiniteScrollTriggerRef.current;
-    if (currentElement) {
-      observer.observe(currentElement);
-    }
-
-    return () => {
-      if (currentElement) {
-        observer.unobserve(currentElement);
-      }
-    };
-  }, [nextPageUrl, fetchRecipes, initialFetchDone]);
+  }, [
+    isSearchMode,
+    isLoadingInitialData,
+    recipes.length,
+    setIsNoSearchResultsFound,
+  ]);
 
   if (error) {
     return (
@@ -117,12 +68,22 @@ const InfiniteScrollRecipeList: React.FC<InfiniteScrollRecipeListProps> = ({
   return (
     <div className="py-10 mt-10 md:mt-20">
       <RecipeList recipes={recipes} />
-      {loading && (
+      {(isLoadingMore || isValidating) && (
         <div className="mt-4">
           <Loading text="Fetching Recipes..." />
         </div>
       )}
-      <div ref={infiniteScrollTriggerRef} />
+      {!isReachingEnd && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setSize(size + 1)}
+            className="px-4 py-2 bg-primaryColor text-white rounded-lg hover:bg-primaryColorLight transition"
+            disabled={isLoadingMore}
+          >
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

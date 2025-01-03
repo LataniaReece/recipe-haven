@@ -96,7 +96,6 @@ const HomeContent = () => {
       <Suspense fallback={<Loading text="Fetching Recipes..." />}>
         <InfiniteScrollRecipeList
           apiUrl={searchApiUrl || generateApiUrl(activeCategory)}
-          activeCategory={activeCategory}
           isSearchMode={!!searchApiUrl}
           setIsNoSearchResultsFound={setIsNoSearchResultsFound}
         />

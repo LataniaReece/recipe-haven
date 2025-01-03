@@ -2,14 +2,27 @@
 
 import { signIn, useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const GoogleSignInPage = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!(status === "loading") && !session) void signIn("google");
-    if (session) window.close();
-  }, [session, status]);
+    const signInWithGoogle = async () => {
+      if (status === "unauthenticated") {
+        await signIn("google");
+      }
+    };
+
+    if (!session) {
+      signInWithGoogle();
+    } else {
+      // Close the popup and redirect in the parent window
+      window.opener?.location.replace("/");
+      window.close();
+    }
+  }, [session, status, router]);
 
   return (
     <div
