@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
   box-sizing: border-box;
 }
 

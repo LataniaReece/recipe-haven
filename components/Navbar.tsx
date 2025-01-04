@@ -40,13 +40,14 @@ const Navbar: React.FC<{
       await signOut({ redirect: false });
       clearFavorites();
       showSuccessToast("See you soon!");
+      handleLinkClick();
     } catch (error) {
       showErrorToast("Failed to sign out. Please try again.");
     }
   };
 
   return (
-    <nav className="bg-white min-h-full flex flex-col items-center shadow-lg pt-8">
+    <nav className="bg-white h-dvh lg:min-h-screen flex flex-col items-center shadow-lg pt-8 z-50">
       {/* Logo */}
       <Link
         href="/"

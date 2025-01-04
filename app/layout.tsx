@@ -57,17 +57,17 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${inter.className} antialiased bg-backgroundColor h-screen`}
+        className={`${inter.className} antialiased bg-backgroundColor min-h-screen lg:h-screen`}
       >
         <SessionProvider>
           <FavoritesProvider>
             {/* Toast Notifications */}
             <CustomToastContainer />
             <SessionWrapper>
-              <div className="flex flex-col lg:flex-row h-full">
+              <div className="flex flex-col lg:flex-row lg:h-full">
                 {/* Navbar */}
                 <div
-                  className={`fixed lg:relative z-50 bg-white h-screen lg:h-full w-64 transform  ${
+                  className={`fixed lg:relative z-50 bg-white h-dvh lg:h-full w-64 transform  ${
                     isMenuOpen ? "translate-x-0" : "-translate-x-full"
                   } lg:translate-x-0 transition-transform duration-300 overflow-y-auto`}
                 >
@@ -83,13 +83,9 @@ export default function RootLayout({
                 )}
 
                 {/* Main Content */}
-                <div
-                  className={`flex-1 flex flex-col ${
-                    isMenuOpen ? "overflow-hidden" : "overflow-auto"
-                  }`}
-                >
+                <div className={`flex-1 flex flex-col relative`}>
                   {/* Menu Button for smaller screens */}
-                  <div className="flex items-center justify-between p-4 lg:hidden bg-white shadow-md sticky top-0 z-30">
+                  <div className="sticky top-0 flex items-center justify-between p-4 lg:hidden bg-white shadow-md z-30 overflow-auto">
                     <button
                       onClick={() => setIsMenuOpen(!isMenuOpen)}
                       className="text-primaryColor text-xl"
@@ -100,11 +96,17 @@ export default function RootLayout({
                       href="/"
                       className={`text-2xl font-bold text-primaryColor tracking-wide ${lobsterFont.className}`}
                     >
-                      Recipe Haven
+                      {isMenuOpen ? "" : "Recipe Haven"}
                     </Link>
                   </div>
-                  <WelcomePopup />
-                  <div className="flex-1">{children}</div>
+                  <div
+                    className={`${
+                      isMenuOpen ? "overflow-hidden" : "lg:overflow-auto"
+                    } `}
+                  >
+                    <WelcomePopup />
+                    <div className="flex-1 min-h-screen">{children}</div>
+                  </div>
                 </div>
               </div>
             </SessionWrapper>

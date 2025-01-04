@@ -16,7 +16,7 @@ const FavoritesPage = () => {
 
   if (status === "unauthenticated" || !session) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-backgroundColor text-center p-6">
+      <div className="flex flex-col items-center justify-center h-full bg-backgroundColor text-center p-6">
         <h2 className="text-2xl font-bold text-primaryColor mb-4">
           Sign In to Add Favorites
         </h2>
@@ -38,7 +38,7 @@ const FavoritesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-backgroundColor p-6">
+    <div className="h-full bg-backgroundColor p-6">
       <div className="flex flex-col md:flex-row items-center justify-between mb-2">
         <h2 className="text-3xl font-bold text-textColor mb-2 md:mb-0">
           {`My favorites (${favorites.length})`}

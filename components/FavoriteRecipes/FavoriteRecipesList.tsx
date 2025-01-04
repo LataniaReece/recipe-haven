@@ -10,7 +10,7 @@ const FavoriteRecipesList: React.FC<{ favoriteRecipes: RecipeFromDB[] }> = ({
   return (
     <div>
       {favoriteRecipes.map((recipe) => (
-        <div key={recipe.id} className="py-4 border-b">
+        <div key={recipe.id} className="py-4 border-b last:border-b-0">
           <div className="flex items-center gap-2">
             <h3 className="text-xl text-textColorLight font-bold">
               {recipe.label}

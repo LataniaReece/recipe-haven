@@ -20,7 +20,7 @@ export default function Loading({
   };
 
   return (
-    <div className="h-full flex flex-col items-center justify-center space-y-4">
+    <div className="h-full flex flex-col items-center justify-center space-y-4 mt-7 lg:mt-0">
       <div
         className={`animate-spin rounded-full ${spinnerSizeClasses[size]} border-secondaryColor`}
       ></div>

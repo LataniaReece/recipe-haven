@@ -46,7 +46,7 @@ const SignInPage = () => {
 
   if (status === "unauthenticated") {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-backgroundColor px-4 sm:px-6">
+      <div className="flex justify-center items-center lg:min-h-screen bg-backgroundColor px-4 sm:px-6 mt-10 lg:mt-0">
         <div className="w-full max-w-md bg-white p-4 sm:p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-primaryColor text-center mb-1">
             Sign In to Recipe Haven
