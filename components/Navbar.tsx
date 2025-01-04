@@ -41,6 +41,7 @@ const Navbar: React.FC<{
       clearFavorites();
       showSuccessToast("See you soon!");
       handleLinkClick();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       showErrorToast("Failed to sign out. Please try again.");
     }
