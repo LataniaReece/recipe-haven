@@ -43,12 +43,14 @@ const FavoritesPage = () => {
         <h2 className="text-3xl font-bold text-textColor mb-2 md:mb-0">
           {`My favorites (${favorites.length})`}
         </h2>
-        <Link
-          href="/"
-          className="border-primaryColor border text-primaryColor py-2 px-4 rounded-lg hover:bg-primaryColor hover:text-white transition"
-        >
-          Explore Recipes
-        </Link>
+        {favorites && favorites.length > 0 && (
+          <Link
+            href="/"
+            className="border-primaryColor border text-primaryColor py-2 px-4 rounded-lg hover:bg-primaryColor hover:text-white transition"
+          >
+            Explore Recipes
+          </Link>
+        )}
       </div>
       {favorites && favorites.length > 0 ? (
         <FavoriteRecipesList favoriteRecipes={favorites} />
